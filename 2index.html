@@ -1,0 +1,1208 @@
+```html
+ body { 
+ font-family: 'Raleway', sans-serif; 
+ background-color: var(--cloud-cream); 
+ color: var(--midnight-blue); 
+ } 
+  
+ h1, h2, h3, h4 { 
+ font-family: 'Cormorant Garamond', serif; 
+ } 
+  
+ .script-accent { 
+ font-family: 'Playfair Display', serif; 
+ font-style: italic; 
+ } 
+  
+ .calendar-container { 
+ background-color: white; 
+ box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+ } 
+  
+ .day-cell { 
+ min-height: 80px; 
+ transition: all 0.2s ease; 
+ } 
+  
+ .day-cell:hover { 
+ background-color: rgba(234, 215, 161, 0.2); 
+ } 
+ 
+ .sabbath { 
+ background-color: rgba(169, 165, 130, 0.2); 
+ } 
+  
+ .new-moon { 
+ background-color: rgba(28, 27, 47, 0.1); 
+ } 
+  
+ .feast-day { 
+ background-color: rgba(234, 215, 161, 0.4); 
+ } 
+  
+ .tab-content { 
+ display: none; 
+ } 
+  
+ .tab-content.active { 
+ display: block; 
+ } 
+  
+ .tab-button { 
+ transition: all 0.3s ease; 
+ } 
+  
+ .tab-button.active { 
+ background-color: var(--olive-leaf); 
+ color: white; 
+ } 
+  
+ .moon-phase { 
+ width: 24px; 
+ height: 24px; 
+ border-radius: 50%; 
+ display: inline-block; 
+ vertical-align: middle; 
+ } 
+  
+ .moon-new { 
+ background-color: #1C1B2F; 
+ box-shadow: 0 0 0 2px rgba(255,255,255,0.3); 
+ } 
+  
+ .moon-waxing-crescent { 
+ background: linear-gradient(90deg, #1C1B2F 50%, #EAD7A1 50%);  } 
+ 
+ .moon-first-quarter { 
+ background: linear-gradient(90deg, #1C1B2F 50%, #EAD7A1 50%);  } 
+  
+ .moon-waxing-gibbous { 
+ background: linear-gradient(90deg, #1C1B2F 25%, #EAD7A1 25%);  } 
+  
+ .moon-full { 
+ background-color: #EAD7A1; 
+ box-shadow: 0 0 0 2px rgba(28,27,47,0.3); 
+ } 
+  
+ .moon-waning-gibbous { 
+ background: linear-gradient(270deg, #1C1B2F 25%, #EAD7A1 25%);  } 
+  
+ .moon-last-quarter { 
+ background: linear-gradient(270deg, #1C1B2F 50%, #EAD7A1 50%);  } 
+  
+ .moon-waning-crescent { 
+ background: linear-gradient(270deg, #1C1B2F 75%, #EAD7A1 25%);  } 
+  
+ .scripture-box { 
+ border-left: 4px solid var(--olive-leaf); 
+ } 
+  
+ .feast-table th { 
+ background-color: var(--midnight-blue); 
+ color: var(--cloud-cream); 
+ } 
+  
+ .feast-table tr:nth-child(even) { 
+ background-color: rgba(169, 165, 130, 0.1); 
+ } 
+  
+ .affirmation-card { 
+ background-color: white; 
+ border-radius: 8px; 
+ box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+ transition: transform 0.3s ease; 
+ } 
+  
+ .affirmation-card:hover {
+ transform: translateY(-5px); 
+ } 
+  
+ .planner-section { 
+ background-color: white; 
+ border-radius: 8px; 
+ box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+ } 
+  
+ .olive-branch { 
+ position: absolute; 
+ opacity: 0.1; 
+ z-index: 0; 
+ } 
+</style> 
+ <!-- Navigation Tabs --> 
+ <div class="bg-[#A9A582] text-[#1C1B2F]"> 
+ <div class="container mx-auto px-4"> 
+ <div class="flex flex-wrap"> 
+ <button class="tab-button active px-4 py-3 font-medium" data-tab="calendar">  �� Calendar 
+ </button> 
+ <button class="tab-button px-4 py-3 font-medium" data-tab="scriptural">  �� Scriptural Foundation 
+ </button> 
+ <button class="tab-button px-4 py-3 font-medium" data-tab="feasts">  �� Feast Days 
+ </button> 
+ <button class="tab-button px-4 py-3 font-medium" data-tab="planner">   Planner 
+ </button> 
+ <button class="tab-button px-4 py-3 font-medium" data-tab="affirmations">  �� Affirmations 
+ </button> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <!-- Main Content --> 
+ <main class="flex-grow py-8"> 
+ <div class="container mx-auto px-4"> 
+ <!-- Calendar Tab --> 
+ <div id="calendar" class="tab-content active"> 
+ <div class="flex flex-col md:flex-row justify-between items-center mb-6">  <h2 class="text-2xl md:text-3xl font-bold">Aviv (Month 1)</h2>  <div class="flex space-x-2 mt-4 md:mt-0">
+ <button id="prev-month" class="px-4 py-2 bg-[#1C1B2F] text-white rounded hover:bg opacity-80">Previous</button> 
+ <button id="next-month" class="px-4 py-2 bg-[#1C1B2F] text-white rounded hover:bg opacity-80">Next</button> 
+ </div> 
+ </div> 
+  
+ <div class="calendar-container rounded-lg overflow-hidden"> 
+ <!-- Calendar Header --> 
+ <div class="grid grid-cols-7 bg-[#1C1B2F] text-white"> 
+ <div class="p-3 text-center font-medium">Day 1</div> 
+ <div class="p-3 text-center font-medium">Day 2</div> 
+ <div class="p-3 text-center font-medium">Day 3</div> 
+ <div class="p-3 text-center font-medium">Day 4</div> 
+ <div class="p-3 text-center font-medium">Day 5</div> 
+ <div class="p-3 text-center font-medium">Day 6</div> 
+ <div class="p-3 text-center font-medium">Day 7</div> 
+ </div> 
+  
+ <!-- Calendar Grid --> 
+ <div class="grid grid-cols-7 border-t border-l"> 
+ <!-- Day 1 - New Moon --> 
+ <div class="day-cell new-moon border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">1</span> 
+ <span class="moon-phase moon-new" title="New Moon"></span>  </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� New Moon</p> 
+ </div> 
+ </div> 
+  
+ <!-- Days 2-6 --> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">2</span> 
+ <span class="moon-phase moon-waxing-crescent" title="Waxing Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">3</span> 
+ <span class="moon-phase moon-waxing-crescent" title="Waxing Crescent"> </span> 
+ </div>
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">4</span> 
+ <span class="moon-phase moon-waxing-crescent" title="Waxing Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">5</span> 
+ <span class="moon-phase moon-waxing-crescent" title="Waxing Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">6</span> 
+ <span class="moon-phase moon-waxing-crescent" title="Waxing Crescent"> </span> 
+ </div> 
+ </div> 
+  
+ <!-- Day 7 - Sabbath --> 
+ <div class="day-cell sabbath border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">7</span> 
+ <span class="moon-phase moon-first-quarter" title="First Quarter"></span>  </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Sabbath</p> 
+ </div> 
+ </div> 
+  
+ <!-- Days 8-13 --> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">8</span> 
+ <span class="moon-phase moon-waxing-gibbous" title="Waxing Gibbous"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">9</span> 
+ <span class="moon-phase moon-waxing-gibbous" title="Waxing Gibbous">
+</span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">10</span> 
+ <span class="moon-phase moon-waxing-gibbous" title="Waxing Gibbous"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">11</span> 
+ <span class="moon-phase moon-waxing-gibbous" title="Waxing Gibbous"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">12</span> 
+ <span class="moon-phase moon-waxing-gibbous" title="Waxing Gibbous"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">13</span> 
+ <span class="moon-phase moon-waxing-gibbous" title="Waxing Gibbous"> </span> 
+ </div> 
+ </div> 
+  
+ <!-- Day 14 - Sabbath & Passover --> 
+ <div class="day-cell sabbath feast-day border-r border-b p-2">  <div class="flex justify-between items-start"> 
+ <span class="font-bold">14</span> 
+ <span class="moon-phase moon-full" title="Full Moon"></span>  </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Sabbath</p> 
+ <p>�� Passover</p> 
+ </div> 
+ </div> 
+  
+ <!-- Days 15-20 - Unleavened Bread --> 
+ <div class="day-cell feast-day border-r border-b p-2">
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">15</span> 
+ <span class="moon-phase moon-waning-gibbous" title="Waning Gibbous"> </span> 
+ </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+ <div class="day-cell feast-day border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">16</span> 
+ <span class="moon-phase moon-waning-gibbous" title="Waning Gibbous"> </span> 
+ </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+ <div class="day-cell feast-day border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">17</span> 
+ <span class="moon-phase moon-waning-gibbous" title="Waning Gibbous"> </span> 
+ </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+ <div class="day-cell feast-day border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">18</span> 
+ <span class="moon-phase moon-waning-gibbous" title="Waning Gibbous"> </span> 
+ </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+ <div class="day-cell feast-day border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">19</span> 
+ <span class="moon-phase moon-waning-gibbous" title="Waning Gibbous"> </span> 
+ </div> 
+ <div class="mt-2 text-xs">
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+ <div class="day-cell feast-day border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">20</span> 
+ <span class="moon-phase moon-waning-gibbous" title="Waning Gibbous"> </span> 
+ </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+  
+ <!-- Day 21 - Sabbath & Last Day of Unleavened Bread -->  <div class="day-cell sabbath feast-day border-r border-b p-2">  <div class="flex justify-between items-start"> 
+ <span class="font-bold">21</span> 
+ <span class="moon-phase moon-last-quarter" title="Last Quarter"></span>  </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Sabbath</p> 
+ <p>�� Unleavened Bread</p> 
+ </div> 
+ </div> 
+  
+ <!-- Days 22-27 --> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">22</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">23</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">24</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span>
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">25</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">26</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">27</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+  
+ <!-- Day 28 - Sabbath --> 
+ <div class="day-cell sabbath border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">28</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ <div class="mt-2 text-xs"> 
+ <p>�� Sabbath</p> 
+ </div> 
+ </div> 
+  
+ <!-- Days 29-30 --> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start"> 
+ <span class="font-bold">29</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+ <div class="day-cell border-r border-b p-2"> 
+ <div class="flex justify-between items-start">
+ <span class="font-bold">30</span> 
+ <span class="moon-phase moon-waning-crescent" title="Waning Crescent"> </span> 
+ </div> 
+ </div> 
+  
+ <!-- Empty cells for the rest of the grid --> 
+ <div class="day-cell border-r border-b p-2 bg-gray-100"></div>  <div class="day-cell border-r border-b p-2 bg-gray-100"></div>  <div class="day-cell border-r border-b p-2 bg-gray-100"></div>  <div class="day-cell border-r border-b p-2 bg-gray-100"></div>  <div class="day-cell border-r border-b p-2 bg-gray-100"></div>  </div> 
+ </div> 
+  
+ <div class="mt-6 bg-white p-4 rounded-lg shadow"> 
+ <h3 class="text-xl font-bold mb-2">Month Legend</h3> 
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-4"> 
+ <div class="flex items-center"> 
+ <span class="moon-phase moon-new mr-2"></span> 
+ <span>New Moon (Month Start)</span> 
+ </div> 
+ <div class="flex items-center"> 
+ <span class="inline-block w-4 h-4 bg-[rgba(169,165,130,0.2)] mr-2"></span>  <span>Weekly Sabbath</span> 
+ </div> 
+ <div class="flex items-center"> 
+ <span class="inline-block w-4 h-4 bg-[rgba(234,215,161,0.4)] mr-2"></span>  <span>Feast Day</span> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <!-- Scriptural Foundation Tab --> 
+ <div id="scriptural" class="tab-content"> 
+ <h2 class="text-2xl md:text-3xl font-bold mb-6">Scriptural Foundation</h2>   
+ <div class="bg-white rounded-lg shadow p-6 mb-6"> 
+ <h3 class="text-xl font-bold mb-4">Why the Dark Moon Begins the Month</h3>  <div class="scripture-box pl-4 py-2 mb-4 italic"> 
+ "And God said, Let there be lights in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years." - Genesis 1:14  </div> 
+ <p class="mb-4">The biblical month begins with the dark new moon, representing the start of the lunar cycle. Just as Yah created light from darkness, each month begins in darkness and
+progresses to light.</p> 
+  
+ <div class="scripture-box pl-4 py-2 mb-4 italic"> 
+ "Blow up the trumpet in the new moon, in the time appointed, on our solemn feast day." - Psalms 81:3 
+ </div> 
+ <p>The Hebrew word for "new moon" (chodesh) comes from the root word meaning "to renew" or "to repair." This indicates the beginning of the lunar cycle when the moon is not visible, before it begins to show light again.</p> 
+ </div> 
+  
+ <div class="bg-white rounded-lg shadow p-6 mb-6"> 
+ <h3 class="text-xl font-bold mb-4">Sabbath: 7-Day Cycles After the New Moon</h3>  <div class="scripture-box pl-4 py-2 mb-4 italic"> 
+ "Remember the sabbath day, to keep it holy. Six days shalt thou labour, and do all thy work: But the seventh day is the sabbath of the LORD thy God..." - Exodus 20:8-10  </div> 
+ <p class="mb-4">The weekly Sabbath follows a seven-day cycle that begins with the new moon. Each month resets this cycle, with Sabbaths falling on the 7th, 14th, 21st, and 28th days of the lunar month.</p> 
+  
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"> 
+ <div> 
+ <h4 class="font-bold mb-2">Sabbath Pattern in Scripture:</h4>  <ul class="list-disc pl-5 space-y-2"> 
+ <li>Creation pattern: Six days of work, seventh day of rest (Genesis 2:2-3)</li>  <li>Manna collection: Six days gathering, none on Sabbath (Exodus 16:23-26) </li> 
+ <li>Fourth Commandment: Keep the seventh day holy (Exodus 20:8-11)</li>  </ul> 
+ </div> 
+ <div> 
+ <h4 class="font-bold mb-2">New Moon & Sabbath Connection:</h4>  <ul class="list-disc pl-5 space-y-2"> 
+ <li>New Moon and Sabbath mentioned together (Isaiah 66:23)</li>  <li>Different observances for New Moon vs. Sabbath (Ezekiel 46:1)</li>  <li>New Moon as a distinct appointed time (Numbers 10:10)</li>  </ul> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <div class="bg-white rounded-lg shadow p-6"> 
+ <h3 class="text-xl font-bold mb-4">Feast Day Calculations with Seasonal Markers</h3>  <div class="scripture-box pl-4 py-2 mb-4 italic"> 
+ "These are the feasts of the LORD, even holy convocations, which ye shall proclaim in
+their seasons." - Leviticus 23:4 
+ </div> 
+ <p class="mb-4">Yah's appointed feast days are calculated based on the lunar calendar, with specific days of specific months designated for each observance. The first month (Aviv) is determined by the ripening of barley in Israel, aligning the calendar with agricultural seasons.</p>   
+ <div class="overflow-x-auto"> 
+ <table class="w-full text-sm"> 
+ <thead> 
+ <tr class="bg-[#1C1B2F] text-white"> 
+ <th class="p-2 text-left">Feast</th> 
+ <th class="p-2 text-left">Lunar Timing</th> 
+ <th class="p-2 text-left">Scripture</th> 
+ </tr> 
+ </thead> 
+ <tbody> 
+ <tr> 
+ <td class="p-2 border">Passover</td> 
+ <td class="p-2 border">14th day of Aviv (1st month)</td>  <td class="p-2 border">Leviticus 23:5</td> 
+ </tr> 
+ <tr> 
+ <td class="p-2 border">Unleavened Bread</td> 
+ <td class="p-2 border">15th-21st days of Aviv</td> 
+ <td class="p-2 border">Leviticus 23:6-8</td> 
+ </tr> 
+ <tr> 
+ <td class="p-2 border">Firstfruits</td> 
+ <td class="p-2 border">Day after the Sabbath during Unleavened Bread</td>  <td class="p-2 border">Leviticus 23:9-14</td> 
+ </tr> 
+ <tr> 
+ <td class="p-2 border">Shavuot (Weeks/Pentecost)</td>  <td class="p-2 border">50 days from Firstfruits</td> 
+ <td class="p-2 border">Leviticus 23:15-21</td> 
+ </tr> 
+ <tr> 
+ <td class="p-2 border">Trumpets</td> 
+ <td class="p-2 border">1st day of 7th month (Ethanim)</td>  <td class="p-2 border">Leviticus 23:24-25</td> 
+ </tr> 
+ <tr> 
+ <td class="p-2 border">Day of Atonement</td> 
+ <td class="p-2 border">10th day of 7th month</td> 
+ <td class="p-2 border">Leviticus 23:27-32</td> 
+ </tr>
+ <tr> 
+ <td class="p-2 border">Tabernacles</td> 
+ <td class="p-2 border">15th-22nd days of 7th month</td>  <td class="p-2 border">Leviticus 23:34-43</td> 
+ </tr> 
+ </tbody> 
+ </table> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <!-- Feast Days Tab --> 
+ <div id="feasts" class="tab-content"> 
+ <h2 class="text-2xl md:text-3xl font-bold mb-6">Feast Day Overview & Tracker</h2>   
+ <div class="overflow-x-auto bg-white rounded-lg shadow"> 
+ <table class="w-full feast-table"> 
+ <thead> 
+ <tr> 
+ <th class="p-3">Feast</th> 
+ <th class="p-3">Timing</th> 
+ <th class="p-3">Spiritual Meaning</th> 
+ <th class="p-3">Scripture</th> 
+ <th class="p-3">Preparation</th> 
+ </tr> 
+ </thead> 
+ <tbody> 
+ <tr> 
+ <td class="p-3 border"> 
+ <div class="font-bold">Passover</div> 
+ <div class="text-sm">סחַפֶּ) Pesach)</div> 
+ </td> 
+ <td class="p-3 border">14th Aviv</td> 
+ <td class="p-3 border">Yah's deliverance and redemption; the Lamb's sacrifice</td> 
+ <td class="p-3 border">Exodus 12:1-14</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Remove leaven from home</li> 
+ <li>Prepare bitter herbs</li> 
+ <li>Recount exodus story</li> 
+ </ul> 
+ </td> 
+ </tr> 
+ <tr> 
+ <td class="p-3 border">
+ <div class="font-bold">Unleavened Bread</div> 
+ <div class="text-sm">ותֹצּמַּהַ חגַ) Chag HaMatzot)</div>  </td> 
+ <td class="p-3 border">15-21 Aviv</td> 
+ <td class="p-3 border">Purity, humility, and removing sin from our lives</td>  <td class="p-3 border">Leviticus 23:6-8</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Eat unleavened bread for 7 days</li> 
+ <li>First and last days are Sabbaths</li> 
+ <li>No regular work on holy days</li> 
+ </ul> 
+ </td> 
+ </tr> 
+ <tr> 
+ <td class="p-3 border"> 
+ <div class="font-bold">Firstfruits</div> 
+ <div class="text-sm">ריםִוּכּבִּ) Bikkurim)</div> 
+ </td> 
+ <td class="p-3 border">Day after Sabbath during Unleavened Bread</td>  <td class="p-3 border">Offering our best to Yah; resurrection</td>  <td class="p-3 border">Leviticus 23:9-14</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Wave offering of first harvest</li> 
+ <li>Gratitude for provision</li> 
+ <li>Acknowledge Yah's bounty</li> 
+ </ul> 
+ </td> 
+ </tr> 
+ <tr> 
+ <td class="p-3 border"> 
+ <div class="font-bold">Shavuot (Weeks)</div> 
+ <div class="text-sm">ותֹועּשבָׁ) Shavuot)</div> 
+ </td> 
+ <td class="p-3 border">50 days from Firstfruits</td>  <td class="p-3 border">Covenant, Torah, and outpouring of Spirit</td>  <td class="p-3 border">Leviticus 23:15-21</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Count 7 complete Sabbaths</li> 
+ <li>Prepare two loaves of bread</li> 
+ <li>Study Torah</li> 
+ </ul> 
+ </td> 
+ </tr>
+ <tr> 
+ <td class="p-3 border"> 
+ <div class="font-bold">Trumpets</div> 
+ <div class="text-sm">עהָוּתרְּ וםֹי) Yom Teruah)</div>  </td> 
+ <td class="p-3 border">1st day, 7th month</td> 
+ <td class="p-3 border">Warning, gathering, and awakening</td>  <td class="p-3 border">Leviticus 23:24-25</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Sound the shofar</li> 
+ <li>Holy convocation</li> 
+ <li>No regular work</li> 
+ </ul> 
+ </td> 
+ </tr> 
+ <tr> 
+ <td class="p-3 border"> 
+ <div class="font-bold">Day of Atonement</div>  <div class="text-sm">ורּפּכִּ וםֹי) Yom Kippur)</div>  </td> 
+ <td class="p-3 border">10th day, 7th month</td>  <td class="p-3 border">National repentance and cleansing</td>  <td class="p-3 border">Leviticus 23:27-32</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Afflict your souls (fast)</li> 
+ <li>Day of complete rest</li> 
+ <li>Repentance and prayer</li> 
+ </ul> 
+ </td> 
+ </tr> 
+ <tr> 
+ <td class="p-3 border"> 
+ <div class="font-bold">Tabernacles</div> 
+ <div class="text-sm">ותֹכּסֻ) Sukkot)</div> 
+ </td> 
+ <td class="p-3 border">15-22, 7th month</td> 
+ <td class="p-3 border">Dwelling with Yah; rehearsing the kingdom</td>  <td class="p-3 border">Leviticus 23:34-43</td> 
+ <td class="p-3 border"> 
+ <ul class="list-disc pl-4 text-sm"> 
+ <li>Build temporary dwellings</li> 
+ <li>Gather branches of trees</li> 
+ <li>Rejoice before Yah</li> 
+ </ul>
+ </td> 
+ </tr> 
+ </tbody> 
+ </table> 
+ </div> 
+  
+ <div class="mt-6 bg-white rounded-lg shadow p-6"> 
+ <h3 class="text-xl font-bold mb-4">Feast Day Tracker</h3> 
+ <p class="mb-4">Use this section to track your feast day preparations and observations. </p> 
+  
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> 
+ <div> 
+ <h4 class="font-bold mb-2">Next Feast: Passover</h4> 
+ <div class="bg-[#F4F1EC] p-4 rounded"> 
+ <p class="mb-2"><strong>Date:</strong> <span id="passover-date">14th Aviv</span></p> 
+ <p class="mb-4"><strong>Days Remaining:</strong> <span id="passover countdown">--</span></p> 
+  
+ <h5 class="font-bold mb-2">Preparation Checklist:</h5>  <div class="space-y-2"> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="prep1" class="mr-2"> 
+ <label for="prep1">Remove all leaven from home</label>  </div> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="prep2" class="mr-2"> 
+ <label for="prep2">Prepare bitter herbs</label> 
+ </div> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="prep3" class="mr-2"> 
+ <label for="prep3">Plan Passover meal</label> 
+ </div> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="prep4" class="mr-2"> 
+ <label for="prep4">Prepare unleavened bread</label>  </div> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="prep5" class="mr-2"> 
+ <label for="prep5">Study Exodus passages</label>  </div> 
+ </div> 
+ </div> 
+ </div> 
+ 
+ <div> 
+ <h4 class="font-bold mb-2">Feast Notes</h4> 
+ <textarea class="w-full h-40 p-3 border rounded" placeholder="Record your thoughts, plans, and reflections for upcoming feast days..."></textarea> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <!-- Planner Tab --> 
+ <div id="planner" class="tab-content"> 
+ <h2 class="text-2xl md:text-3xl font-bold mb-6">Monthly & Weekly Planning</h2>   
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> 
+ <div class="planner-section p-6"> 
+ <h3 class="text-xl font-bold mb-4">�� New Moon Reflections</h3>  <p class="mb-4">Use this space to set intentions for the new month and reflect on Yah's guidance.</p> 
+  
+ <div class="mb-4"> 
+ <label class="block font-medium mb-2">Month Name:</label>  <input type="text" class="w-full p-2 border rounded" value="Aviv (Month 1)" />  </div> 
+  
+ <div class="mb-4"> 
+ <label class="block font-medium mb-2">Monthly Scripture Focus:</label>  <input type="text" class="w-full p-2 border rounded" placeholder="Enter a scripture to focus on this month..." /> 
+ </div> 
+  
+ <div class="mb-4"> 
+ <label class="block font-medium mb-2">Monthly Goals:</label>  <textarea class="w-full h-24 p-2 border rounded" placeholder="What do you hope to accomplish this month?"></textarea> 
+ </div> 
+  
+ <div> 
+ <label class="block font-medium mb-2">New Moon Gratitude:</label>  <textarea class="w-full h-24 p-2 border rounded" placeholder="What are you thankful for as this new month begins?"></textarea> 
+ </div> 
+ </div> 
+  
+ <div class="planner-section p-6"> 
+ <h3 class="text-xl font-bold mb-4">�� Weekly Sabbath Tracking</h3>  
+ <div class="space-y-4"> 
+ <div class="border-b pb-4"> 
+ <h4 class="font-bold">First Sabbath (Day 7)</h4>  <div class="mt-2"> 
+ <label class="block text-sm mb-1">Torah Portion:</label>  <input type="text" class="w-full p-2 border rounded text-sm" />  </div> 
+ <div class="mt-2"> 
+ <label class="block text-sm mb-1">Sabbath Focus:</label>  <input type="text" class="w-full p-2 border rounded text-sm" placeholder="Rest, study, family time..." /> 
+ </div> 
+ </div> 
+  
+ <div class="border-b pb-4"> 
+ <h4 class="font-bold">Second Sabbath (Day 14)</h4>  <div class="mt-2"> 
+ <label class="block text-sm mb-1">Torah Portion:</label>  <input type="text" class="w-full p-2 border rounded text-sm" />  </div> 
+ <div class="mt-2"> 
+ <label class="block text-sm mb-1">Sabbath Focus:</label>  <input type="text" class="w-full p-2 border rounded text-sm" placeholder="Rest, study, family time..." /> 
+ </div> 
+ </div> 
+  
+ <div class="border-b pb-4"> 
+ <h4 class="font-bold">Third Sabbath (Day 21)</h4>  <div class="mt-2"> 
+ <label class="block text-sm mb-1">Torah Portion:</label>  <input type="text" class="w-full p-2 border rounded text-sm" />  </div> 
+ <div class="mt-2"> 
+ <label class="block text-sm mb-1">Sabbath Focus:</label>  <input type="text" class="w-full p-2 border rounded text-sm" placeholder="Rest, study, family time..." /> 
+ </div> 
+ </div> 
+  
+ <div> 
+ <h4 class="font-bold">Fourth Sabbath (Day 28)</h4>  <div class="mt-2"> 
+ <label class="block text-sm mb-1">Torah Portion:</label>  <input type="text" class="w-full p-2 border rounded text-sm" />  </div>
+ <div class="mt-2"> 
+ <label class="block text-sm mb-1">Sabbath Focus:</label>  <input type="text" class="w-full p-2 border rounded text-sm" placeholder="Rest, study, family time..." /> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"> 
+ <div class="planner-section p-6"> 
+ <h3 class="text-xl font-bold mb-4">�� Feast Preparation Notes</h3>   
+ <div class="mb-4"> 
+ <label class="block font-medium mb-2">Upcoming Feast:</label>  <select class="w-full p-2 border rounded"> 
+ <option>Passover (14th Aviv)</option> 
+ <option>Unleavened Bread (15-21 Aviv)</option> 
+ <option>Firstfruits</option> 
+ <option>Shavuot (Weeks)</option> 
+ <option>Trumpets (1st of 7th Month)</option> 
+ <option>Day of Atonement (10th of 7th Month)</option>  <option>Tabernacles (15-22 of 7th Month)</option> 
+ </select> 
+ </div> 
+  
+ <div class="mb-4"> 
+ <label class="block font-medium mb-2">Preparation Tasks:</label>  <div class="space-y-2"> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="task1" class="mr-2"> 
+ <input type="text" class="flex-grow p-2 border rounded" placeholder="Add a task..." /> 
+ </div> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="task2" class="mr-2"> 
+ <input type="text" class="flex-grow p-2 border rounded" placeholder="Add a task..." /> 
+ </div> 
+ <div class="flex items-center"> 
+ <input type="checkbox" id="task3" class="mr-2"> 
+ <input type="text" class="flex-grow p-2 border rounded" placeholder="Add a task..." /> 
+ </div> 
+ <button class="mt-2 px-4 py-2 bg-[#A9A582] text-white rounded hover:bg-
+opacity-80">+ Add Task</button> 
+ </div> 
+ </div> 
+  
+ <div> 
+ <label class="block font-medium mb-2">Feast Day Notes:</label>  <textarea class="w-full h-24 p-2 border rounded" placeholder="Record your thoughts and plans for the upcoming feast..."></textarea> 
+ </div> 
+ </div> 
+  
+ <div class="planner-section p-6"> 
+ <h3 class="text-xl font-bold mb-4">�� Meal Planning</h3>   
+ <div class="mb-4"> 
+ <label class="block font-medium mb-2">Weekly Meal Ideas:</label>  <div class="space-y-2"> 
+ <div> 
+ <label class="block text-sm">Day 1:</label> 
+ <input type="text" class="w-full p-2 border rounded" />  </div> 
+ <div> 
+ <label class="block text-sm">Day 2:</label> 
+ <input type="text" class="w-full p-2 border rounded" />  </div> 
+ <div> 
+ <label class="block text-sm">Day 3:</label> 
+ <input type="text" class="w-full p-2 border rounded" />  </div> 
+ <div> 
+ <label class="block text-sm">Day 4:</label> 
+ <input type="text" class="w-full p-2 border rounded" />  </div> 
+ <div> 
+ <label class="block text-sm">Day 5:</label> 
+ <input type="text" class="w-full p-2 border rounded" />  </div> 
+ <div> 
+ <label class="block text-sm">Day 6:</label> 
+ <input type="text" class="w-full p-2 border rounded" />  </div> 
+ <div> 
+ <label class="block text-sm">Sabbath (Day 7):</label>  <input type="text" class="w-full p-2 border rounded" />  </div> 
+ </div>
+ </div> 
+  
+ <div> 
+ <label class="block font-medium mb-2">Feast Special Meals:</label>  <textarea class="w-full h-24 p-2 border rounded" placeholder="Plan special meals for upcoming feast days..."></textarea> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <div class="mt-6 planner-section p-6"> 
+ <h3 class="text-xl font-bold mb-4">�� Weekly Affirmation & Mood Tracker</h3>   
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> 
+ <div> 
+ <h4 class="font-bold mb-2">Weekly Affirmation:</h4> 
+ <textarea class="w-full h-24 p-2 border rounded" placeholder="Write your scripture based affirmation for the week..."></textarea> 
+  
+ <h4 class="font-bold mt-4 mb-2">Weekly Scripture Memorization:</h4>  <textarea class="w-full h-24 p-2 border rounded" placeholder="Scripture to memorize this week..."></textarea> 
+ </div> 
+  
+ <div> 
+ <h4 class="font-bold mb-2">Moon Phase & Mood Tracker:</h4>  <div class="bg-[#F4F1EC] p-4 rounded"> 
+ <div class="space-y-3"> 
+ <div class="flex items-center justify-between"> 
+ <div class="flex items-center"> 
+ <span class="moon-phase moon-new mr-2"></span> <span>New Moon (Day 1)</span> 
+ </div> 
+ <select class="p-1 border rounded"> 
+ <option>Select mood</option> 
+<option>Peaceful</option> 
+<option>Energetic</option> 
+<option>Reflective</option> 
+<option>Tired</option> 
+<option>Grateful</option> 
+ </select> 
+ </div> 
+  
+ <div class="flex items-center justify-between"> 
+ <div class="flex items-center"> 
+ <span class="moon-phase moon-waxing-crescent mr-2"></span>
+ <span>Waxing Crescent</span> 
+ </div> 
+ <select class="p-1 border rounded"> 
+ <option>Select mood</option> 
+<option>Peaceful</option> 
+<option>Energetic</option> 
+<option>Reflective</option> 
+<option>Tired</option> 
+<option>Grateful</option> 
+ </select> 
+ </div> 
+  
+ <div class="flex items-center justify-between"> 
+ <div class="flex items-center"> 
+ <span class="moon-phase moon-first-quarter mr-2"></span> <span>First Quarter</span> 
+ </div> 
+ <select class="p-1 border rounded"> 
+ <option>Select mood</option> 
+<option>Peaceful</option> 
+<option>Energetic</option> 
+<option>Reflective</option> 
+<option>Tired</option> 
+<option>Grateful</option> 
+ </select> 
+ </div> 
+  
+ <div class="flex items-center justify-between"> 
+ <div class="flex items-center"> 
+ <span class="moon-phase moon-full mr-2"></span> <span>Full Moon</span> 
+ </div> 
+ <select class="p-1 border rounded"> 
+ <option>Select mood</option> 
+<option>Peaceful</option> 
+<option>Energetic</option> 
+<option>Reflective</option> 
+<option>Tired</option> 
+<option>Grateful</option> 
+ </select> 
+ </div> 
+  
+ <div class="flex items-center justify-between"> 
+ <div class="flex items-center"> 
+ <span class="moon-phase moon-waning-gibbous mr-2"></span> <span>Waning Gibbous</span>
+ </div> 
+ <select class="p-1 border rounded"> 
+ <option>Select mood</option> 
+<option>Peaceful</option> 
+<option>Energetic</option> 
+<option>Reflective</option> 
+<option>Tired</option> 
+<option>Grateful</option> 
+ </select> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+ </div> 
+  
+ <!-- Affirmations Tab --> 
+ <div id="affirmations" class="tab-content"> 
+ <h2 class="text-2xl md:text-3xl font-bold mb-6">Affirmations & Commandments</h2>   
+ <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
+ <div class="affirmation-card p-5"> 
+ <h3 class="text-xl font-bold mb-3">Sabbath Rest</h3> 
+ <p class="italic mb-4">"I rest in Yah's order."</p> 
+ <div class="scripture-box pl-4 py-2 mb-4 text-sm italic"> 
+ "Remember the sabbath day, to keep it holy. Six days shalt thou labour, and do all thy work: But the seventh day is the sabbath of the LORD thy God..." - Exodus 20:8-10  </div> 
+ <p class="text-sm">This week, I will honor the Sabbath by setting aside worldly concerns and focusing on spiritual renewal.</p> 
+ </div> 
+  
+ <div class="affirmation-card p-5"> 
+ <h3 class="text-xl font-bold mb-3">New Moon Renewal</h3>  <p class="italic mb-4">"With each new moon, I am renewed."</p>  <div class="scripture-box pl-4 py-2 mb-4 text-sm italic"> 
+ "...from one new moon to another... shall all flesh come to worship..." - Isaiah 66:23  </div> 
+ <p class="text-sm">As the moon begins its cycle anew, I commit to spiritual growth and renewed dedication to Yah's ways.</p> 
+ </div> 
+  
+ <div class="affirmation-card p-5"> 
+ <h3 class="text-xl font-bold mb-3">Feast Preparation</h3> 
+ <p class="italic mb-4">"I prepare my household like Noah before the rain."</p>
+ <div class="scripture-box pl-4 py-2 mb-4 text-sm italic"> 
+ "Thus did Noah; according to all that God commanded him, so did he." - Genesis 6:22 
+ </div> 
+ <p class="text-sm">I will diligently prepare for Yah's appointed times, ensuring my household is ready to observe His feasts.</p> 
+ </div> 
+  
+ <div class="affirmation-card p-5"> 
+ <h3 class="text-xl font-bold mb-3">Sacred Time</h3> 
+ <p class="italic mb-4">"My time belongs to the Most High."</p>  <div class="scripture-box pl-4 py-2 mb-4 text-sm italic"> 
+ "To every thing there is a season, and a time to every purpose under the heaven." - Ecclesiastes 3:1 
+ </div> 
+ <p class="text-sm">I recognize that all time is sacred and will align my days with Yah's divine calendar.</p> 
+ </div> 
+  
+ <div class="affirmation-card p-5"> 
+ <h3 class="text-xl font-bold mb-3">Passover Reflection</h3>  <p class="italic mb-4">"I am delivered by the blood of the Lamb."</p>  <div class="scripture-box pl-4 py-2 mb-4 text-sm italic"> 
+ "And the blood shall be to you for a token upon the houses where ye are: and when I see the blood, I will pass over you..." - Exodus 12:13 
+ </div> 
+ <p class="text-sm">During Passover, I reflect on Yah's deliverance and protection in my life.</p> 
+ </div> 
+  
+ <div class="affirmation-card p-5"> 
+ <h3 class="text-xl font-bold mb-3">Unleavened Living</h3> 
+ <p class="italic mb-4">"I walk in purity and truth."</p> 
+ <div class="scripture-box pl-4 py-2 mb-4 text-sm italic"> 
+ "Therefore let us keep the feast, not with old leaven, neither with the leaven of malice and wickedness; but with the unleavened bread of sincerity and truth." - 1 Corinthians 5:8  </div> 
+ <p class="text-sm">I commit to removing spiritual leaven from my life and walking in sincerity and truth.</p> 
+ </div> 
+ </div> 
+  
+ <div class="mt-8 bg-white rounded-lg shadow p-6"> 
+ <h3 class="text-xl font-bold mb-4">Ten Commandments Reflection</h3>   
+ <div class="space-y-4">
+ <div class="p-3 border-l-4 border-[#A9A582]"> 
+ <p class="font-bold">1. "Thou shalt have no other gods before me." - Exodus 20:3</p> 
+ <textarea class="w-full h-16 p-2 border rounded mt-2 text-sm" placeholder="Reflect on how you are keeping Yah first in your life..."></textarea> 
+ </div> 
+  
+ <div class="p-3 border-l-4 border-[#A9A582]"> 
+ <p class="font-bold">2. "Thou shalt not make unto thee any graven image..." - Exodus 20:4</p> 
+ <textarea class="w-full h-16 p-2 border rounded mt-2 text-sm" placeholder="Reflect on avoiding idolatry in all forms..."></textarea> 
+ </div> 
+  
+ <div class="p-3 border-l-4 border-[#A9A582]"> 
+ <p class="font-bold">3. "Thou shalt not take the name of the LORD thy God in vain..." - Exodus 20:7</p> 
+ <textarea class="w-full h-16 p-2 border rounded mt-2 text-sm" placeholder="Reflect on honoring Yah's name..."></textarea> 
+ </div> 
+  
+ <div class="p-3 border-l-4 border-[#A9A582]"> 
+ <p class="font-bold">4. "Remember the sabbath day, to keep it holy..." - Exodus 20:8</p> 
+ <textarea class="w-full h-16 p-2 border rounded mt-2 text-sm" placeholder="Reflect on your Sabbath observance..."></textarea> 
+ </div> 
+  
+<button id="view-commandments-btn" class="mt-2 px-4 py-2 bg-[#1C1B2F] text-white rounded hover:bg-opacity-80">
+  View All Ten Commandments
+</button>
+ <div id="commandments-display" class="mt-4 text-sm text-gray-800 leading-relaxed space-y-2">
+  <!-- Commandments will appear here -->
+</div>
+å
+ 
+ </div> 
+  
+ <div class="mt-6 bg-white rounded-lg shadow p-6"> 
+ <h3 class="text-xl font-bold mb-4">Daily Torah Quotes</h3> 
+  
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+ <div class="p-3 bg-[#F4F1EC] rounded"> 
+ <p class="italic">"The law of the LORD is perfect, converting the soul: the testimony of the LORD is sure, making wise the simple."</p> 
+ <p class="text-right font-bold mt-2">- Psalm 19:7</p> 
+ </div> 
+  
+ <div class="p-3 bg-[#F4F1EC] rounded"> 
+ <p class="italic">"Thy word is a lamp unto my feet, and a light unto my path."</p>  <p class="text-right font-bold mt-2">- Psalm 119:105</p>
+ </div> 
+  
+ <div class="p-3 bg-[#F4F1EC] rounded"> 
+ <p class="italic">"And these words, which I command thee this day, shall be in thine heart: And thou shalt teach them diligently unto thy children..."</p> 
+ <p class="text-right font-bold mt-2">- Deuteronomy 6:6-7</p>  </div> 
+  
+ <div class="p-3 bg-[#F4F1EC] rounded"> 
+ <p class="italic">"For this commandment which I command thee this day, it is not hidden from thee, neither is it far off."</p> 
+ <p class="text-right font-bold mt-2">- Deuteronomy 30:11</p>  </div> ress</button
+ </div> 
+  
+ <button class="mt-4 px-4 py-2 bg-[#A9A582] text-white rounded hover:bg-opacity 80">Generate New Quote</button> 
+ </div> 
+ </div> 
+ </div> 
+ </main> 
+  
+ <!-- Footer --> 
+ <footer class="bg-[#1C1B2F] text-[#F4F1EC] py-6"> 
+ <div class="container mx-auto px-4"> 
+ <div class="flex flex-col md:flex-row justify-between items-center"> 
+ <div> 
+ <h2 class="text-xl font-bold">Biblical Lunar Calendar Planner</h2>  <p class="text-sm text-[#EAD7A1]">"From one new moon to another..." - Isaiah 66:23</p> 
+ </div> 
+ <div class="mt-4 md:mt-0"> 
+ <button id="download-btn" class="px-4 py-2 bg-[#A9A582] text-white rounded hover:bg opacity-80">Save Progress</button> 
+ </div> 
+ </div> 
+ <div class="mt-4 text-center text-sm"> 
+ <p>Created to help you align with Yah's appointed times.</p> 
+ </div> 
+ </div> 
+ </footer> 
+</div> 
+<script> 
+ // Tab Navigation 
+ const tabButtons = document.querySelectorAll('.tab-button');
+ const tabContents = document.querySelectorAll('.tab-content');   
+ tabButtons.forEach(button => { 
+ button.addEventListener('click', () => { 
+ const tabId = button.getAttribute('data-tab'); 
+// Categorized Commandments Data
+const commandments = [
+  {
+    category: "Loving the Most High",
+    verses: [
+      "1. You shall have no other gods before me. (Exodus 20:3)",
+      "2. You shall not make for yourself an idol. (Exodus 20:4-6)",
+      "3. You shall not take the name of the LORD your God in vain. (Exodus 20:7)",
+      "4. Remember the Sabbath day, to keep it holy. (Exodus 20:8-11)"
+    ]
+  },
+  {
+    category: "Loving Others",
+    verses: [
+      "5. Honor your father and your mother. (Exodus 20:12)",
+      "6. You shall not murder. (Exodus 20:13)",
+      "7. You shall not commit adultery. (Exodus 20:14)",
+      "8. You shall not steal. (Exodus 20:15)",
+      "9. You shall not bear false witness against your neighbor. (Exodus 20:16)",
+      "10. You shall not covet. (Exodus 20:17)"
+    ]
+  }
+];
+
+// All Commandments Button Functionality
+document.getElementById("view-commandments-btn").addEventListener("click", () => {
+  let html = "";
+  commandments.forEach(group => {
+    html += `<h3 class="text-lg font-semibold mt-4">${group.category}</h3><ul class="list-disc ml-5">`;
+    group.verses.forEach(cmd => {
+      html += `<li>${cmd}</li>`;
+    });
+    html += "</ul>";
+  });
+  document.getElementById("commandments-display").innerHTML = html;
+});
+  
+ // Hide all tab contents 
+ tabContents.forEach(content => { 
+ content.classList.remove('active'); 
+ }); 
+  
+ // Remove active class from all buttons 
+ tabButtons.forEach(btn => { 
+ btn.classList.remove('active'); 
+ }); 
+  
+ // Show the selected tab content 
+ document.getElementById(tabId).classList.add('active');   
+ // Add active class to the clicked button 
+ button.classList.add('active'); 
+ }); 
+ }); 
+  
+ // Calendar Navigation 
+ const monthNames = [ 
+ "Aviv (Month 1)",  
+ "Ziv (Month 2)",  
+ "Sivan (Month 3)",  
+ "Tammuz (Month 4)",  
+ "Av (Month 5)",  
+ "Elul (Month 6)",  
+ "Ethanim (Month 7)",  
+ "Bul (Month 8)",  
+ "Kislev (Month 9)",  
+ "Tevet (Month 10)",  
+ "Shevat (Month 11)",  
+ "Adar (Month 12)" 
+ ]; 
+  
+ let currentMonthIndex = 0; 
+  
+ document.getElementById('prev-month').addEventListener('click', () => {  currentMonthIndex = (currentMonthIndex - 1 + 12) % 12;  updateCalendarMonth(); 
+ });
+  
+ document.getElementById('next-month').addEventListener('click', () => { 
+ currentMonthIndex = (currentMonthIndex + 1) % 12; 
+ updateCalendarMonth(); 
+ }); 
+  
+ function updateCalendarMonth() { 
+ const monthTitle = document.querySelector('#calendar h2'); 
+ monthTitle.textContent = monthNames[currentMonthIndex]; 
+  
+ // In a full implementation, this would update the calendar days as well  } 
+  
+ // Checkbox functionality 
+ const checkboxes = document.querySelectorAll('input[type="checkbox"]');  checkboxes.forEach(checkbox => { 
+ checkbox.addEventListener('change', () => { 
+ if (checkbox.checked) { 
+ checkbox.parentElement.classList.add('text-gray-500'); 
+ } else { 
+ checkbox.parentElement.classList.remove('text-gray-500'); 
+ } 
+ }); 
+ }); 
+  
+document.getElementById("download-btn").addEventListener("click", () => {
+  const notes = document.getElementById("notes-textarea").value;
+  localStorage.setItem("userNotes", notes);
+  alert("Your progress has been saved in your browser!");
+});
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("userNotes");
+  if (saved) {
+    document.getElementById("notes-textarea").value = saved;
+  }
+});
+  
+ // <button id="generate-quote-btn" class="mt-2 px-4 py-2 bg-[#1C1B2F] text-white rounded hover:bg-opacity-80">
+  Generate New Quote
+</button>
+
+<!-- This is where the quote will appear -->
+<div id="quote-display" class="mt-4 text-base italic text-gray-700"></div>
+
+  if (quoteButton) { 
+ const quotes = [ 
+// Quotes Aligned with Scripture
+const quotes = [
+  "“You are fearfully and wonderfully made.” – Psalm 139:14",
+  "“I can do all things through Christ who strengthens me.” – Philippians 4:13",
+  "“The Most High will fight for you; you need only to be still.” – Exodus 14:14",
+  "“Be strong and courageous. Do not be afraid.” – Deuteronomy 31:6",
+  "“Trust in the Lord with all your heart.” – Proverbs 3:5",
+  "“Set your mind on things above.” – Colossians 3:2",
+  "“The Lord is close to the brokenhearted.” – Psalm 34:18"
+ { text: "Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful.", reference: "Psalm 1:1" },  { text: "But his delight is in the law of the LORD; and in his law doth he meditate day and night.", reference: "Psalm 1:2" }, 
+ { text: "Trust in the LORD with all thine heart; and lean not unto thine own understanding.", reference: "Proverbs 3:5" }, 
+ { text: "In all thy ways acknowledge him, and he shall direct thy paths.", reference: "Proverbs 3:6" }, 
+ { text: "The fear of the LORD is the beginning of wisdom: and the knowledge of the holy is understanding.", reference: "Proverbs 9:10" } 
+ ];
+  
+ ];
+
+// Quote Button Functionality
+document.getElementById("generate-quote-btn").addEventListener("click", () => {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  const selectedQuote = quotes[randomIndex];
+  document.getElementById("quote-display").innerText = selectedQuote;
+});
+
+</script>
+<script>
+  // Tab Navigation
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tabId = button.getAttribute('data-tab');
+      // your tab logic...
+    });
+  });
+
+  // Commandments Script
+  const commandments = [
+    // your commandments here...
+  ];
+  document.getElementById("view-commandments-btn").addEventListener("click", () => {
+    // display commandments logic...
+  });
+
+  // Quotes Script
+  const quotes = [
+    "“You are fearfully and wonderfully made.” – Psalm 139:14",
+    "“I can do all things through Christ who strengthens me.” – Philippians 4:13",
+    "“The Most High will fight for you; you need only to be still.” – Exodus 14:14",
+    "“Be strong and courageous. Do not be afraid.” – Deuteronomy 31:6",
+    "“Trust in the Lord with all your heart.” – Proverbs 3:5",
+    "“Set your mind on things above.” – Colossians 3:2",
+    "“The Lord is close to the brokenhearted.” – Psalm 34:18"
+  ];
+  document.getElementById("generate-quote-btn").addEventListener("click", () => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const selectedQuote = quotes[randomIndex];
+    document.getElementById("quote-display").innerText = selectedQuote;
+  });
+
+</script>
+
+
